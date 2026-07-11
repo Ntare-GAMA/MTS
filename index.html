@@ -1,0 +1,2592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTS Baker's — Artisan Bakery, Kigali</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #F9F4EE;
+      --warm-white: #FDFAF6;
+      --parchment: #EDE4D4;
+      --gold: #C8973A;
+      --gold-light: #E8B96A;
+      --gold-dark: #9A6E20;
+      --espresso: #2C1810;
+      --chocolate: #4A2C1A;
+      --mocha: #7A5038;
+      --sage: #8B9B7A;
+      --blush: #E8CEBE;
+      --mtn-gold: #FFCC00;
+      --mtn-blue: #0066CC;
+      --text-main: #2C1810;
+      --text-muted: #7A6050;
+      --border: #E0D0BC;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--text-main);
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--parchment); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+    /* ─── TYPOGRAPHY ─── */
+    .font-display { font-family: 'Playfair Display', serif; }
+    .font-serif { font-family: 'Cormorant Garamond', serif; }
+
+    /* ─── HEADER ─── */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(253, 250, 246, 0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.4s ease;
+    }
+
+    header.scrolled {
+      background: rgba(253, 250, 246, 0.98);
+      box-shadow: 0 4px 40px rgba(44, 24, 16, 0.08);
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+    }
+
+    .logo-mark {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(200, 151, 58, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-mark::after {
+      content: '';
+      position: absolute;
+      top: -30%; left: -30%;
+      width: 60%; height: 60%;
+      background: rgba(255,255,255,0.3);
+      border-radius: 50%;
+    }
+
+    .logo-text-group { line-height: 1; }
+    .logo-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--espresso);
+      letter-spacing: -0.02em;
+    }
+    .logo-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      color: var(--gold);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    nav { display: flex; gap: 2.5rem; align-items: center; }
+    nav a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      position: relative;
+      transition: color 0.3s;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width 0.3s ease;
+    }
+    nav a:hover { color: var(--espresso); }
+    nav a:hover::after { width: 100%; }
+
+    .header-actions { display: flex; gap: 1rem; align-items: center; }
+
+    .btn-cart {
+      position: relative;
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: var(--espresso);
+    }
+
+    .btn-cart:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -6px; right: -6px;
+      background: var(--gold-dark);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 600;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      display: none;
+    }
+
+    .btn-order-now {
+      padding: 0.65rem 1.5rem;
+      background: var(--espresso);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .btn-order-now:hover {
+      background: var(--gold-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 25px rgba(154, 110, 32, 0.3);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px;
+      background: none;
+      border: none;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--espresso);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ─── MOBILE NAV ─── */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 80px; left: 0; right: 0; bottom: 0;
+      background: var(--warm-white);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .mobile-nav.open { display: flex; }
+
+    .mobile-nav a {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--espresso);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .mobile-nav a:hover { color: var(--gold); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1600&h=900&fit=crop&q=90');
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.05);
+      transition: transform 8s ease;
+    }
+
+    .hero-bg.loaded { transform: scale(1); }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        105deg,
+        rgba(44, 24, 16, 0.85) 0%,
+        rgba(44, 24, 16, 0.6) 50%,
+        rgba(44, 24, 16, 0.15) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 8rem 2rem 4rem;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 40px; height: 1px;
+      background: var(--gold-light);
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      font-weight: 900;
+      color: white;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      max-width: 700px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 3rem;
+      max-width: 500px;
+      line-height: 1.6;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      padding: 1rem 2.5rem;
+      background: var(--gold);
+      color: var(--espresso);
+      border: none;
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(200, 151, 58, 0.4);
+    }
+
+    .btn-ghost {
+      padding: 1rem 2.5rem;
+      background: transparent;
+      color: white;
+      border: 1.5px solid rgba(255,255,255,0.5);
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s;
+      display: inline-block;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: white;
+    }
+
+    .hero-badges {
+      position: absolute;
+      bottom: 3rem;
+      right: 2rem;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .hero-badge {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 16px;
+      padding: 1rem 1.5rem;
+      text-align: center;
+      color: white;
+    }
+
+    .hero-badge-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      display: block;
+      line-height: 1;
+    }
+
+    .hero-badge-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    /* ─── RIBBON OFFER ─── */
+    .ribbon {
+      background: var(--espresso);
+      color: var(--gold-light);
+      text-align: center;
+      padding: 0.85rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      letter-spacing: 0.05em;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ribbon-scroll {
+      display: inline-flex;
+      gap: 3rem;
+      animation: scroll-ribbon 20s linear infinite;
+      white-space: nowrap;
+    }
+
+    @keyframes scroll-ribbon {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .ribbon-dot {
+      color: var(--gold);
+      margin: 0 0.5rem;
+    }
+
+    /* ─── SECTION UTILITY ─── */
+    section { padding: 6rem 0; }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 30px; height: 1px;
+      background: var(--gold);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700;
+      color: var(--espresso);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .section-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      font-style: italic;
+      line-height: 1.6;
+      max-width: 560px;
+    }
+
+    /* ─── MENU / PRODUCTS ─── */
+    .menu-section { background: var(--cream); }
+
+    .menu-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .category-tabs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+
+    .tab-btn {
+      padding: 0.65rem 1.4rem;
+      border: none;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.25s;
+    }
+
+    .tab-btn.active {
+      color: var(--gold-dark);
+      border-bottom-color: var(--gold-dark);
+    }
+
+    .tab-btn:hover { color: var(--espresso); }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 60px rgba(44, 24, 16, 0.12);
+    }
+
+    .product-img-wrap {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+    }
+
+    .product-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .product-card:hover .product-img-wrap img {
+      transform: scale(1.08);
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 1rem; left: 1rem;
+      background: var(--gold);
+      color: white;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.65rem;
+      border-radius: 100px;
+    }
+
+    .product-quick-add {
+      position: absolute;
+      bottom: 1rem; right: 1rem;
+      width: 42px; height: 42px;
+      background: white;
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transform: translateY(60px);
+      transition: all 0.3s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      color: var(--espresso);
+    }
+
+    .product-card:hover .product-quick-add {
+      transform: translateY(0);
+    }
+
+    .product-quick-add:hover {
+      background: var(--gold);
+      color: white;
+    }
+
+    .product-body {
+      padding: 1.25rem;
+    }
+
+    .product-cat {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+
+    .product-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--espresso);
+      margin-bottom: 0.6rem;
+    }
+
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .product-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--gold-dark);
+    }
+
+    .product-price span {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+
+    .stars {
+      display: flex;
+      gap: 2px;
+      color: var(--gold);
+      font-size: 0.75rem;
+    }
+
+    /* ─── ABOUT ─── */
+    .about-section { background: white; }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .about-images {
+      position: relative;
+      height: 600px;
+    }
+
+    .about-img-main {
+      position: absolute;
+      top: 0; left: 0;
+      width: 75%; height: 80%;
+      border-radius: 24px;
+      object-fit: cover;
+      box-shadow: 0 24px 60px rgba(44, 24, 16, 0.15);
+    }
+
+    .about-img-accent {
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 55%; height: 55%;
+      border-radius: 20px;
+      object-fit: cover;
+      box-shadow: 0 20px 50px rgba(44, 24, 16, 0.12);
+      border: 6px solid white;
+    }
+
+    .about-gold-card {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--gold);
+      color: white;
+      border-radius: 20px;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      box-shadow: 0 16px 40px rgba(200, 151, 58, 0.4);
+      z-index: 3;
+    }
+
+    .about-gold-card-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 900;
+      display: block;
+      line-height: 1;
+    }
+
+    .about-gold-card-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .stat-card {
+      padding: 1.5rem;
+      background: var(--cream);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold-dark);
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .promise-list {
+      list-style: none;
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .promise-list li {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .promise-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.9rem;
+      margin-top: 2px;
+    }
+
+    .promise-text strong {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--espresso);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .promise-text p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ─── TESTIMONIALS ─── */
+    .testimonials-section { background: var(--espresso); }
+
+    .testimonials-section .section-label { color: var(--gold-light); }
+    .testimonials-section .section-label::before { background: var(--gold-light); }
+    .testimonials-section .section-title { color: white; }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .testimonial-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 2rem;
+      transition: all 0.3s;
+    }
+
+    .testimonial-card:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: var(--gold);
+    }
+
+    .testimonial-stars {
+      color: var(--gold);
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .testimonial-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: rgba(255,255,255,0.9);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .testimonial-avatar {
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: white;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .testimonial-name {
+      font-weight: 600;
+      color: white;
+      font-size: 0.95rem;
+    }
+
+    .testimonial-role {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ─── CONTACT ─── */
+    .contact-section { background: var(--cream); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .contact-info-card {
+      background: var(--espresso);
+      border-radius: 28px;
+      padding: 3rem;
+      color: white;
+    }
+
+    .contact-info-card .section-label { color: var(--gold-light); }
+    .contact-info-card .section-label::before { background: var(--gold-light); }
+    .contact-info-card .section-title { color: white; font-size: 2rem; margin-bottom: 2rem; }
+
+    .contact-detail {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-icon {
+      width: 44px; height: 44px;
+      background: rgba(200, 151, 58, 0.2);
+      border: 1px solid var(--gold);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.2rem;
+    }
+
+    .contact-detail-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 0.3rem;
+    }
+
+    .contact-detail-value {
+      color: white;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .contact-form-wrap {
+      padding: 3rem;
+      background: white;
+      border-radius: 28px;
+      border: 1px solid var(--border);
+    }
+
+    .form-group { margin-bottom: 1.5rem; }
+
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 0.85rem 1.2rem;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--espresso);
+      background: var(--warm-white);
+      transition: border-color 0.3s;
+      outline: none;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--gold);
+      background: white;
+    }
+
+    .form-textarea { height: 140px; resize: vertical; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #1A0E08;
+      color: rgba(255,255,255,0.7);
+      padding: 4rem 0 2rem;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: white;
+    }
+
+    .footer-desc {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      max-width: 280px;
+    }
+
+    .footer-social { display: flex; gap: 0.75rem; }
+
+    .social-btn {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.9rem;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    .social-btn:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: white;
+    }
+
+    .footer-col-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: white;
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+
+    .footer-links a {
+      text-decoration: none;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.88rem;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover { color: var(--gold-light); }
+
+    .footer-hours { font-size: 0.88rem; line-height: 2; }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.8rem;
+    }
+
+    .footer-bottom a { color: var(--gold); text-decoration: none; }
+
+    /* ─── CART SIDEBAR ─── */
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      display: none;
+      backdrop-filter: blur(4px);
+    }
+
+    .cart-overlay.open { display: block; }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 100%;
+      max-width: 480px;
+      background: var(--warm-white);
+      z-index: 201;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .cart-overlay.open .cart-drawer {
+      transform: translateX(0);
+    }
+
+    .cart-header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cart-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--espresso);
+    }
+
+    .cart-close {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--espresso);
+      font-size: 1.2rem;
+      transition: all 0.2s;
+    }
+
+    .cart-close:hover { background: var(--espresso); color: white; border-color: var(--espresso); }
+
+    .cart-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 2rem;
+    }
+
+    .cart-empty {
+      text-align: center;
+      padding: 4rem 0;
+    }
+
+    .cart-empty-icon { font-size: 4rem; margin-bottom: 1rem; opacity: 0.3; }
+
+    .cart-empty-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .cart-empty-sub { font-size: 0.88rem; color: var(--text-muted); }
+
+    .cart-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cart-item-img {
+      width: 80px; height: 80px;
+      object-fit: cover;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+
+    .cart-item-info { flex: 1; }
+
+    .cart-item-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--espresso);
+      margin-bottom: 0.25rem;
+    }
+
+    .cart-item-price {
+      font-size: 0.9rem;
+      color: var(--gold-dark);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .qty-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .qty-btn {
+      width: 32px; height: 32px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--espresso);
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    .qty-btn:hover { background: var(--gold); color: white; }
+
+    .qty-val {
+      min-width: 32px;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--espresso);
+    }
+
+    .cart-item-remove {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.8rem;
+      padding: 0.25rem;
+      transition: color 0.2s;
+      align-self: flex-start;
+    }
+
+    .cart-item-remove:hover { color: #c0392b; }
+
+    .cart-footer {
+      padding: 1.5rem 2rem;
+      border-top: 1px solid var(--border);
+      background: white;
+    }
+
+    .cart-totals {
+      margin-bottom: 1.5rem;
+    }
+
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-muted);
+    }
+
+    .cart-total-row.total {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--espresso);
+      font-weight: 600;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+      margin-top: 0.75rem;
+    }
+
+    .free-delivery-note {
+      background: #e8f5e9;
+      color: #2e7d32;
+      font-size: 0.82rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .btn-checkout {
+      width: 100%;
+      padding: 1rem;
+      background: var(--espresso);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-checkout:hover {
+      background: var(--gold-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 25px rgba(154, 110, 32, 0.3);
+    }
+
+    /* ─── CHECKOUT MODAL ─── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .checkout-modal {
+      background: white;
+      border-radius: 28px;
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 40px 120px rgba(0,0,0,0.3);
+      animation: modal-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes modal-in {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-header {
+      padding: 2rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--espresso);
+      border-radius: 28px 28px 0 0;
+    }
+
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: white;
+    }
+
+    .modal-close {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.1rem;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover { background: rgba(255,255,255,0.15); }
+
+    .modal-body { padding: 2.5rem; }
+
+    .modal-section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--espresso);
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .order-summary-box {
+      background: var(--cream);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+    }
+
+    .order-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      padding: 0.3rem 0;
+      color: var(--text-muted);
+    }
+
+    .order-line.total {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--espresso);
+      font-weight: 700;
+      margin-top: 0.5rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ─── PAYMENT METHOD SELECTOR ─── */
+    .payment-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
+
+    .payment-option {
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.25s;
+      position: relative;
+    }
+
+    .payment-option:hover { border-color: var(--gold); }
+    .payment-option.selected { border-color: var(--gold-dark); background: #FFF8EC; }
+
+    .payment-option input {
+      position: absolute;
+      opacity: 0;
+      width: 0; height: 0;
+    }
+
+    .payment-option-inner {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .payment-logo {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .payment-logo.momo { background: var(--mtn-gold); }
+    .payment-logo.airtel { background: #E30613; }
+    .payment-logo.cash { background: #e8f5e9; }
+    .payment-logo.card { background: #e3f2fd; }
+
+    .payment-option-name {
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--espresso);
+    }
+
+    .payment-option-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .payment-check {
+      position: absolute;
+      top: 0.5rem; right: 0.5rem;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--gold-dark);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.65rem;
+    }
+
+    .payment-option.selected .payment-check { display: flex; }
+
+    .momo-fields {
+      background: #FFFBEE;
+      border: 1.5px solid var(--mtn-gold);
+      border-radius: 14px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .momo-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .momo-logo-pill {
+      background: var(--mtn-gold);
+      color: #333;
+      font-weight: 800;
+      font-size: 0.7rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 100px;
+      letter-spacing: 0.05em;
+    }
+
+    .momo-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--espresso);
+    }
+
+    .momo-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .momo-step {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .momo-step-num {
+      width: 22px; height: 22px;
+      background: var(--mtn-gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #333;
+      flex-shrink: 0;
+    }
+
+    /* ─── PAYMENT STATUS ─── */
+    .payment-status-modal {
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+
+    .status-icon {
+      font-size: 5rem;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    .status-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--espresso);
+      margin-bottom: 0.75rem;
+    }
+
+    .status-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    .status-spinner {
+      width: 60px; height: 60px;
+      border: 4px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── PLACE ORDER BTN ─── */
+    .btn-place-order {
+      width: 100%;
+      padding: 1.1rem;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-place-order:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(154, 110, 32, 0.4);
+    }
+
+    .btn-place-order:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-place-order .spinner {
+      width: 20px; height: 20px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: none;
+    }
+
+    .btn-place-order.loading .spinner { display: block; }
+    .btn-place-order.loading .btn-text { display: none; }
+
+    /* ─── TOAST ─── */
+    .toast-container {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .toast {
+      background: var(--espresso);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 14px;
+      font-size: 0.9rem;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      border-left: 4px solid var(--gold);
+      animation: toast-in 0.3s ease;
+      max-width: 320px;
+    }
+
+    .toast.success { border-left-color: #4CAF50; }
+    .toast.error { border-left-color: #f44336; }
+
+    @keyframes toast-in {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ─── ANIMATIONS ─── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about-images { height: 400px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    }
+
+    @media (max-width: 768px) {
+      nav, .btn-order-now { display: none; }
+      .hamburger { display: flex; }
+      .hero-badges { display: none; }
+      .footer-top { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .payment-methods { grid-template-columns: 1fr; }
+      .hero-title { font-size: 3rem; }
+      section { padding: 4rem 0; }
+      .about-gold-card { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header id="site-header">
+  <div class="header-inner">
+    <a href="#home" class="logo">
+      <div class="logo-mark">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+          <path d="M13 3C8 3 4 7 4 12C4 15 5.5 17.5 8 19C8 21 9.5 23 13 23C16.5 23 18 21 18 19C20.5 17.5 22 15 22 12C22 7 18 3 13 3Z" fill="white" opacity="0.9"/>
+          <path d="M13 8C11 8 9.5 9 9.5 10.5C9.5 12 11 13 13 13C15 13 16.5 12 16.5 10.5C16.5 9 15 8 13 8Z" fill="white" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="logo-text-group">
+        <div class="logo-name">MTS Baker's</div>
+        <div class="logo-tagline">Artisan Bakery · Kigali</div>
+      </div>
+    </a>
+
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#menu">Menu</a>
+      <a href="#about">Our Story</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="btn-cart" id="cart-btn" aria-label="Cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-count" id="cart-count">0</span>
+      </button>
+      <a href="#menu" class="btn-order-now">Order Now</a>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ─── MOBILE NAV ─── -->
+<div class="mobile-nav" id="mobile-nav">
+  <a href="#home" class="mobile-link">Home</a>
+  <a href="#menu" class="mobile-link">Menu</a>
+  <a href="#about" class="mobile-link">Our Story</a>
+  <a href="#testimonials" class="mobile-link">Reviews</a>
+  <a href="#contact" class="mobile-link">Contact</a>
+</div>
+
+<!-- ─── HERO ─── -->
+<section id="home" class="hero">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Artisan Bakery · Est. 2014</div>
+    <h1 class="hero-title">
+      Baked with<br>
+      <em>Soul &amp; Craft</em>
+    </h1>
+    <p class="hero-sub">
+      Every loaf, pastry, and cake is a love letter to the people of Kigali — made before dawn, served fresh each morning.
+    </p>
+    <div class="hero-ctas">
+      <a href="#menu" class="btn-primary">Explore Our Menu</a>
+      <a href="#about" class="btn-ghost">Our Story</a>
+    </div>
+  </div>
+
+  <div class="hero-badges">
+    <div class="hero-badge">
+      <span class="hero-badge-num">10+</span>
+      <div class="hero-badge-label">Years of Craft</div>
+    </div>
+    <div class="hero-badge">
+      <span class="hero-badge-num">50+</span>
+      <div class="hero-badge-label">Daily Items</div>
+    </div>
+    <div class="hero-badge">
+      <span class="hero-badge-num">1K+</span>
+      <div class="hero-badge-label">Happy Guests</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── RIBBON ─── -->
+<div class="ribbon">
+  <span class="ribbon-scroll">
+    <span>🎉 Buy 3 Pastries, Get 1 FREE</span>
+    <span class="ribbon-dot">✦</span>
+    <span>Free Delivery on Orders Above 20,000 RWF</span>
+    <span class="ribbon-dot">✦</span>
+    <span>Fresh Baked Every Morning Before 7am</span>
+    <span class="ribbon-dot">✦</span>
+    <span>Pay Easily via MTN MoMo</span>
+    <span class="ribbon-dot">✦</span>
+    <span>🎉 Buy 3 Pastries, Get 1 FREE</span>
+    <span class="ribbon-dot">✦</span>
+    <span>Free Delivery on Orders Above 20,000 RWF</span>
+    <span class="ribbon-dot">✦</span>
+    <span>Fresh Baked Every Morning Before 7am</span>
+    <span class="ribbon-dot">✦</span>
+    <span>Pay Easily via MTN MoMo</span>
+    <span class="ribbon-dot">✦</span>
+  </span>
+</div>
+
+<!-- ─── MENU ─── -->
+<section id="menu" class="menu-section">
+  <div class="container">
+    <div class="menu-header">
+      <div>
+        <div class="section-label">Our Collection</div>
+        <h2 class="section-title">Freshly Baked<br>Every Morning</h2>
+      </div>
+      <p class="section-desc">From crusty sourdoughs to pillowy pastries, every item is made with ingredients of the finest quality.</p>
+    </div>
+
+    <div class="category-tabs" id="cat-tabs"></div>
+    <div class="products-grid" id="products-grid"></div>
+  </div>
+</section>
+
+<!-- ─── ABOUT ─── -->
+<section id="about" class="about-section">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-images fade-up">
+        <img
+          class="about-img-main"
+          src="https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=700&h=800&fit=crop&q=85"
+          alt="Our artisan bakers at work"
+          loading="lazy"
+        />
+        <img
+          class="about-img-accent"
+          src="https://images.unsplash.com/photo-1556910110-a5a63dfd393c?w=500&h=500&fit=crop&q=85"
+          alt="Fresh pastries display"
+          loading="lazy"
+        />
+        <div class="about-gold-card">
+          <span class="about-gold-card-num">100%</span>
+          <div class="about-gold-card-label">Fresh Daily</div>
+        </div>
+      </div>
+
+      <div class="fade-up">
+        <div class="section-label">Our Story</div>
+        <h2 class="section-title">Where Passion Meets the Oven</h2>
+        <p class="section-desc" style="margin-top: 1.5rem;">
+          Since 2014, MTS Baker's has been Kigali's most beloved artisan bakery. Our bakers arrive before dawn, hands deep in dough, hearts full of purpose.
+        </p>
+
+        <ul class="promise-list">
+          <li>
+            <div class="promise-icon">🌾</div>
+            <div class="promise-text">
+              <strong>Finest Ingredients Only</strong>
+              <p>We source premium flour, local honey, and seasonal produce — nothing artificial, ever.</p>
+            </div>
+          </li>
+          <li>
+            <div class="promise-icon">⏰</div>
+            <div class="promise-text">
+              <strong>Baked Fresh Before Dawn</strong>
+              <p>Every item is prepared the same morning it's served. Freshness is non-negotiable.</p>
+            </div>
+          </li>
+          <li>
+            <div class="promise-icon">🎂</div>
+            <div class="promise-text">
+              <strong>Custom Celebration Cakes</strong>
+              <p>From intimate birthdays to grand weddings — we craft edible memories to order.</p>
+            </div>
+          </li>
+        </ul>
+
+        <div class="about-stats">
+          <div class="stat-card">
+            <div class="stat-num">10+</div>
+            <div class="stat-label">Years serving Kigali</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">50+</div>
+            <div class="stat-label">Signature items</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">1,000+</div>
+            <div class="stat-label">Happy customers</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">4.9★</div>
+            <div class="stat-label">Average rating</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TESTIMONIALS ─── -->
+<section id="testimonials" class="testimonials-section">
+  <div class="container">
+    <div class="section-label">Guest Reviews</div>
+    <h2 class="section-title">What Kigali is Saying</h2>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card fade-up">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"The croissants here rival anything I've had in Paris. The lamination is perfect — shatteringly crisp outside, buttery clouds within. I come every single morning without fail."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">M</div>
+          <div>
+            <div class="testimonial-name">Marie K.</div>
+            <div class="testimonial-role">Kigali, Rwanda</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card fade-up">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"Our wedding cake was beyond beautiful and even more delicious. The team understood our vision perfectly and delivered something that left our guests speechless."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">J</div>
+          <div>
+            <div class="testimonial-name">Jean-Paul N.</div>
+            <div class="testimonial-role">Wedding Client</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card fade-up">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"The sourdough bread has completely changed how my family eats breakfast. We pick up a loaf every Saturday. The crust, the crumb — it's the real thing."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">A</div>
+          <div>
+            <div class="testimonial-name">Amina R.</div>
+            <div class="testimonial-role">Regular Customer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section id="contact" class="contact-section">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info-card fade-up">
+        <div class="section-label">Find Us</div>
+        <h2 class="section-title">Visit the Bakery</h2>
+
+        <div class="contact-detail">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div class="contact-detail-label">Address</div>
+            <div class="contact-detail-value">KN 5 Ave, Nyarugenge<br>Kigali, Rwanda</div>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-icon">📞</div>
+          <div>
+            <div class="contact-detail-label">Phone</div>
+            <div class="contact-detail-value">+250 78 000 0000</div>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-icon">⏰</div>
+          <div>
+            <div class="contact-detail-label">Hours</div>
+            <div class="contact-detail-value">
+              Mon–Fri: 6:00am – 8:00pm<br>
+              Sat–Sun: 7:00am – 7:00pm
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-detail">
+          <div class="contact-icon">📧</div>
+          <div>
+            <div class="contact-detail-label">Email</div>
+            <div class="contact-detail-value">hello@mtsbakery.rw</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form-wrap fade-up">
+        <div class="section-label">Get in Touch</div>
+        <h2 class="section-title" style="font-size:2rem; margin-bottom:1.5rem;">Send Us a Message</h2>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input type="text" class="form-input" placeholder="Jean-Paul Nkurunziza">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input type="tel" class="form-input" placeholder="078 000 0000">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Subject</label>
+          <input type="text" class="form-input" placeholder="Custom cake order, catering, feedback…">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea" placeholder="Tell us what you need — we'd love to help!"></textarea>
+        </div>
+
+        <button class="btn-primary" style="width:100%; text-align:center; padding: 1rem;" onclick="showToast('Message sent! We\'ll be in touch within 24 hours.', 'success')">
+          Send Message
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">
+          <div class="logo-mark" style="width:42px;height:42px;">
+            <svg width="20" height="20" viewBox="0 0 26 26" fill="none">
+              <path d="M13 3C8 3 4 7 4 12C4 15 5.5 17.5 8 19C8 21 9.5 23 13 23C16.5 23 18 21 18 19C20.5 17.5 22 15 22 12C22 7 18 3 13 3Z" fill="white" opacity="0.9"/>
+            </svg>
+          </div>
+          <div class="footer-brand-name">MTS Baker's</div>
+        </div>
+        <p class="footer-desc">Artisan baking crafted with love in the heart of Kigali since 2014. Fresh every day, exceptional always.</p>
+        <div class="footer-social">
+          <a class="social-btn" href="#" aria-label="Facebook">f</a>
+          <a class="social-btn" href="#" aria-label="Instagram">ig</a>
+          <a class="social-btn" href="#" aria-label="Twitter">tw</a>
+          <a class="social-btn" href="#" aria-label="WhatsApp">wa</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Quick Links</div>
+        <ul class="footer-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#menu">Our Menu</a></li>
+          <li><a href="#about">Our Story</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Menu</div>
+        <ul class="footer-links">
+          <li><a href="#menu">Artisan Breads</a></li>
+          <li><a href="#menu">Pastries</a></li>
+          <li><a href="#menu">Cakes & Sweets</a></li>
+          <li><a href="#menu">Pizza & Burgers</a></li>
+          <li><a href="#menu">Drinks</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Opening Hours</div>
+        <div class="footer-hours" style="color:rgba(255,255,255,0.6); font-size:0.85rem;">
+          Monday – Friday<br>
+          <span style="color:var(--gold-light);">6:00 am – 8:00 pm</span><br><br>
+          Saturday – Sunday<br>
+          <span style="color:var(--gold-light);">7:00 am – 7:00 pm</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>© 2025 MTS Baker's Bakery. All rights reserved.</div>
+      <div>We accept <a href="#">MTN MoMo</a> · <a href="#">Airtel Money</a> · Cash</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── CART OVERLAY ─── -->
+<div class="cart-overlay" id="cart-overlay">
+  <div class="cart-drawer">
+    <div class="cart-header">
+      <div class="cart-title">Your Cart</div>
+      <button class="cart-close" id="cart-close">✕</button>
+    </div>
+    <div class="cart-body" id="cart-body"></div>
+    <div class="cart-footer" id="cart-footer" style="display:none;">
+      <div class="cart-totals" id="cart-totals"></div>
+      <button class="btn-checkout" id="checkout-btn">Proceed to Checkout</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CHECKOUT MODAL ─── -->
+<div class="modal-overlay" id="checkout-modal">
+  <div class="checkout-modal">
+    <div class="modal-header">
+      <div class="modal-title">Complete Your Order</div>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Order Summary -->
+      <div class="modal-section-title">Order Summary</div>
+      <div class="order-summary-box" id="order-summary-box"></div>
+
+      <!-- Customer Info -->
+      <div class="modal-section-title">Your Details</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input type="text" class="form-input" id="co-name" placeholder="Your full name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number *</label>
+          <input type="tel" class="form-input" id="co-phone" placeholder="078XXXXXXX">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Delivery Address *</label>
+        <input type="text" class="form-input" id="co-address" placeholder="Street, District, Kigali">
+      </div>
+
+      <!-- Payment -->
+      <div class="modal-section-title">Payment Method</div>
+      <div class="payment-methods">
+        <label class="payment-option selected" data-method="momo">
+          <input type="radio" name="payment" value="momo" checked>
+          <span class="payment-check">✓</span>
+          <div class="payment-option-inner">
+            <div class="payment-logo momo">📱</div>
+            <div>
+              <div class="payment-option-name">MTN MoMo</div>
+              <div class="payment-option-sub">Mobile Money</div>
+            </div>
+          </div>
+        </label>
+
+        <label class="payment-option" data-method="airtel">
+          <input type="radio" name="payment" value="airtel">
+          <span class="payment-check">✓</span>
+          <div class="payment-option-inner">
+            <div class="payment-logo airtel" style="color:white;">✦</div>
+            <div>
+              <div class="payment-option-name">Airtel Money</div>
+              <div class="payment-option-sub">Mobile Money</div>
+            </div>
+          </div>
+        </label>
+
+        <label class="payment-option" data-method="cash">
+          <input type="radio" name="payment" value="cash">
+          <span class="payment-check">✓</span>
+          <div class="payment-option-inner">
+            <div class="payment-logo cash">💵</div>
+            <div>
+              <div class="payment-option-name">Cash on Delivery</div>
+              <div class="payment-option-sub">Pay at your door</div>
+            </div>
+          </div>
+        </label>
+
+        <label class="payment-option" data-method="card">
+          <input type="radio" name="payment" value="card">
+          <span class="payment-check">✓</span>
+          <div class="payment-option-inner">
+            <div class="payment-logo card">💳</div>
+            <div>
+              <div class="payment-option-name">Bank Card</div>
+              <div class="payment-option-sub">Visa / Mastercard</div>
+            </div>
+          </div>
+        </label>
+      </div>
+
+      <!-- MoMo Fields -->
+      <div class="momo-fields" id="momo-fields">
+        <div class="momo-header">
+          <div class="momo-logo-pill">MTN MoMo</div>
+          <div class="momo-label">Mobile Money Payment</div>
+        </div>
+        <div class="form-group" style="margin-bottom:0.5rem;">
+          <label class="form-label">MoMo Number *</label>
+          <input type="tel" class="form-input" id="co-momo" placeholder="078XXXXXXX or 079XXXXXXX">
+        </div>
+        <div class="momo-steps">
+          <div class="momo-step"><span class="momo-step-num">1</span> Enter your MTN number above</div>
+          <div class="momo-step"><span class="momo-step-num">2</span> You'll receive a USSD prompt on your phone</div>
+          <div class="momo-step"><span class="momo-step-num">3</span> Enter your MoMo PIN to confirm payment</div>
+        </div>
+      </div>
+
+      <!-- Airtel Fields -->
+      <div id="airtel-fields" style="display:none;" class="momo-fields" style="border-color:#E30613;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Airtel Number *</label>
+          <input type="tel" class="form-input" id="co-airtel" placeholder="073XXXXXXX">
+        </div>
+      </div>
+
+      <button class="btn-place-order" id="place-order-btn">
+        <span class="spinner"></span>
+        <span class="btn-text">🔒 Confirm &amp; Place Order</span>
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<!-- ─── PAYMENT STATUS MODAL ─── -->
+<div class="modal-overlay" id="payment-status-modal">
+  <div class="checkout-modal">
+    <div class="modal-body">
+      <div class="payment-status-modal" id="payment-status-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TOAST CONTAINER ─── -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+  /* ─── CONSTANTS ─── */
+  const API_BASE_URL = 'http://localhost:3000/api';
+
+  /* ─── PRODUCTS DATA ─── */
+  const products = [
+    { id:1, name:"Sourdough Bread", price:3500, category:"Bread", image:"https://images.unsplash.com/photo-1549931319-a545dcf3bc73?w=600&h=450&fit=crop&q=80" },
+    { id:2, name:"Baguette", price:2000, category:"Bread", image:"https://images.unsplash.com/photo-1608198093002-ad4e005484ec?w=600&h=450&fit=crop&q=80" },
+    { id:3, name:"Whole Wheat Bread", price:2500, category:"Bread", image:"https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&h=450&fit=crop&q=80" },
+    { id:4, name:"Ciabatta", price:3000, category:"Bread", image:"https://images.unsplash.com/photo-1586444248902-2f64eddc13df?w=600&h=450&fit=crop&q=80" },
+    { id:5, name:"Rye Bread", price:3200, category:"Bread", image:"https://images.unsplash.com/photo-1598373182133-52452f7691ef?w=600&h=450&fit=crop&q=80" },
+    { id:6, name:"Focaccia", price:3500, category:"Bread", image:"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&h=450&fit=crop&q=80" },
+    { id:7, name:"Multigrain Bread", price:3000, category:"Bread", image:"https://images.unsplash.com/photo-1585478259715-876acc5be8eb?w=600&h=450&fit=crop&q=80" },
+    { id:8, name:"Brioche", price:3800, category:"Bread", image:"https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600&h=450&fit=crop&q=80" },
+    { id:13, name:"Croissant", price:2500, category:"Pastries", image:"https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&h=450&fit=crop&q=80", featured:true },
+    { id:14, name:"Blueberry Muffin", price:2000, category:"Pastries", image:"https://images.unsplash.com/photo-1607958996333-41aef7caefaa?w=600&h=450&fit=crop&q=80" },
+    { id:15, name:"Cinnamon Roll", price:2500, category:"Pastries", image:"https://images.unsplash.com/photo-1626094309830-abbb0c99da4a?w=600&h=450&fit=crop&q=80" },
+    { id:16, name:"Fruit Tart", price:3500, category:"Pastries", image:"https://images.unsplash.com/photo-1519915212116-7cfef71f1d3e?w=600&h=450&fit=crop&q=80" },
+    { id:17, name:"Danish Pastry", price:2800, category:"Pastries", image:"https://images.unsplash.com/photo-1509365465985-25d11c17e812?w=600&h=450&fit=crop&q=80" },
+    { id:18, name:"Éclair", price:3000, category:"Pastries", image:"https://images.unsplash.com/photo-1612182062631-19fbed77dc16?w=600&h=450&fit=crop&q=80" },
+    { id:19, name:"Chocolate Cake", price:15000, category:"Cakes", image:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&h=450&fit=crop&q=80", featured:true },
+    { id:20, name:"Wedding Cake", price:50000, category:"Cakes", image:"https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=600&h=450&fit=crop&q=80" },
+    { id:21, name:"Red Velvet Cake", price:18000, category:"Cakes", image:"https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=600&h=450&fit=crop&q=80" },
+    { id:22, name:"Cheesecake", price:12000, category:"Cakes", image:"https://images.unsplash.com/photo-1533134242443-d4e2e2257e0c?w=600&h=450&fit=crop&q=80" },
+    { id:23, name:"Margherita Pizza", price:8000, category:"Pizza", image:"https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&h=450&fit=crop&q=80" },
+    { id:24, name:"Pepperoni Pizza", price:9000, category:"Pizza", image:"https://images.unsplash.com/photo-1628840042765-356cda07504e?w=600&h=450&fit=crop&q=80" },
+    { id:25, name:"Vegetarian Pizza", price:8500, category:"Pizza", image:"https://images.unsplash.com/photo-1511689660979-10d2b1aada49?w=600&h=450&fit=crop&q=80" },
+    { id:26, name:"BBQ Chicken Pizza", price:10000, category:"Pizza", image:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=450&fit=crop&q=80" },
+    { id:29, name:"Classic Beef Burger", price:5000, category:"Burgers", image:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&h=450&fit=crop&q=80" },
+    { id:30, name:"Cheese Burger", price:5500, category:"Burgers", image:"https://images.unsplash.com/photo-1550547660-d9450f859349?w=600&h=450&fit=crop&q=80" },
+    { id:31, name:"Chicken Burger", price:4500, category:"Burgers", image:"https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=600&h=450&fit=crop&q=80" },
+    { id:34, name:"Sweet Potato Fries", price:2500, category:"Sides", image:"https://images.unsplash.com/photo-1623653387945-2fd25214f8fc?w=600&h=450&fit=crop&q=80" },
+    { id:36, name:"Brochettes (Beef)", price:3500, category:"Sides", image:"https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=600&h=450&fit=crop&q=80" },
+    { id:37, name:"Brochettes (Chicken)", price:3000, category:"Sides", image:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&h=450&fit=crop&q=80" },
+    { id:39, name:"Fresh Orange Juice", price:1500, category:"Drinks", image:"https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=600&h=450&fit=crop&q=80" },
+    { id:42, name:"Coffee (Hot)", price:1000, category:"Drinks", image:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&h=450&fit=crop&q=80" },
+    { id:43, name:"Iced Coffee", price:1200, category:"Drinks", image:"https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?w=600&h=450&fit=crop&q=80" },
+  ];
+
+  /* ─── STATE ─── */
+  let cart = [];
+  let activeCategory = 'All';
+
+  const categories = ['All', ...new Set(products.map(p => p.category))];
+
+  /* ─── UTILITIES ─── */
+  const fmt = n => n.toLocaleString('en-RW') + ' RWF';
+
+  function showToast(msg, type = '') {
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.textContent = msg;
+    document.getElementById('toast-container').appendChild(t);
+    setTimeout(() => t.remove(), 3500);
+  }
+
+  /* ─── RENDER CATEGORIES ─── */
+  function renderTabs() {
+    const tabs = document.getElementById('cat-tabs');
+    tabs.innerHTML = categories.map(c => `
+      <button class="tab-btn ${c === activeCategory ? 'active' : ''}" onclick="filterCat('${c}')">${c}</button>
+    `).join('');
+  }
+
+  function filterCat(cat) {
+    activeCategory = cat;
+    renderTabs();
+    renderProducts();
+  }
+
+  /* ─── RENDER PRODUCTS ─── */
+  function renderProducts() {
+    const filtered = activeCategory === 'All' ? products : products.filter(p => p.category === activeCategory);
+    const grid = document.getElementById('products-grid');
+    grid.innerHTML = filtered.map(p => `
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&h=450&fit=crop'">
+          ${p.featured ? '<div class="product-badge">Chef\'s Pick</div>' : ''}
+          <button class="product-quick-add" onclick="addToCart(${p.id})" aria-label="Add to cart">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+        <div class="product-body">
+          <div class="product-cat">${p.category}</div>
+          <div class="product-name">${p.name}</div>
+          <div class="product-footer">
+            <div class="product-price">${fmt(p.price)} <span>/ each</span></div>
+            <div class="stars">★★★★★</div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  /* ─── CART ─── */
+  function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    const existing = cart.find(i => i.id === id);
+    if (existing) {
+      existing.quantity++;
+    } else {
+      cart.push({ ...product, quantity: 1 });
+    }
+    updateCartUI();
+    showToast(`${product.name} added to cart ✓`, 'success');
+  }
+
+  function updateQuantity(id, delta) {
+    const item = cart.find(i => i.id === id);
+    if (!item) return;
+    item.quantity += delta;
+    if (item.quantity <= 0) cart = cart.filter(i => i.id !== id);
+    updateCartUI();
+    renderCartDrawer();
+  }
+
+  function getTotal() {
+    return cart.reduce((s, i) => s + i.price * i.quantity, 0);
+  }
+
+  function updateCartUI() {
+    const count = cart.reduce((s, i) => s + i.quantity, 0);
+    const badge = document.getElementById('cart-count');
+    badge.textContent = count;
+    badge.style.display = count > 0 ? 'flex' : 'none';
+  }
+
+  function openCart() {
+    document.getElementById('cart-overlay').classList.add('open');
+    renderCartDrawer();
+  }
+
+  function closeCart() {
+    document.getElementById('cart-overlay').classList.remove('open');
+  }
+
+  function renderCartDrawer() {
+    const body = document.getElementById('cart-body');
+    const footer = document.getElementById('cart-footer');
+
+    if (cart.length === 0) {
+      body.innerHTML = `
+        <div class="cart-empty">
+          <div class="cart-empty-icon">🛒</div>
+          <div class="cart-empty-text">Your cart is empty</div>
+          <div class="cart-empty-sub">Browse our menu and add something delicious!</div>
+        </div>`;
+      footer.style.display = 'none';
+      return;
+    }
+
+    body.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <img class="cart-item-img" src="${item.image}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200&h=200&fit=crop'">
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-price">${fmt(item.price)}</div>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">−</button>
+            <span class="qty-val">${item.quantity}</span>
+            <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+          </div>
+        </div>
+        <button class="cart-item-remove" onclick="updateQuantity(${item.id}, -${item.quantity})" title="Remove">✕</button>
+      </div>
+    `).join('');
+
+    const total = getTotal();
+    const totals = document.getElementById('cart-totals');
+    totals.innerHTML = `
+      ${total >= 20000 ? '<div class="free-delivery-note">🎉 Free Delivery Applied!</div>' : `<div class="cart-total-row"><span>Delivery</span><span>~2,000 RWF</span></div>`}
+      <div class="cart-total-row total"><span>Total</span><span>${fmt(total)}</span></div>
+    `;
+
+    footer.style.display = 'block';
+  }
+
+  /* ─── CHECKOUT ─── */
+  function openCheckout() {
+    closeCart();
+    const total = getTotal();
+
+    const summaryBox = document.getElementById('order-summary-box');
+    summaryBox.innerHTML = cart.map(i => `
+      <div class="order-line"><span>${i.name} × ${i.quantity}</span><span>${fmt(i.price * i.quantity)}</span></div>
+    `).join('') + `
+      <div class="order-line total"><span>Total</span><span>${fmt(total)}</span></div>
+    `;
+
+    document.getElementById('checkout-modal').classList.add('open');
+  }
+
+  function closeCheckout() {
+    document.getElementById('checkout-modal').classList.remove('open');
+  }
+
+  /* ─── PAYMENT METHOD SWITCH ─── */
+  document.querySelectorAll('.payment-option').forEach(opt => {
+    opt.addEventListener('click', function() {
+      document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+      this.classList.add('selected');
+      const method = this.dataset.method;
+
+      document.getElementById('momo-fields').style.display = method === 'momo' ? 'block' : 'none';
+      document.getElementById('airtel-fields').style.display = method === 'airtel' ? 'block' : 'none';
+    });
+  });
+
+  /* ─── PLACE ORDER ─── */
+  async function placeOrder() {
+    const name = document.getElementById('co-name').value.trim();
+    const phone = document.getElementById('co-phone').value.trim();
+    const address = document.getElementById('co-address').value.trim();
+    const method = document.querySelector('.payment-option.selected').dataset.method;
+    const momoNum = document.getElementById('co-momo').value.trim();
+    const airtelNum = document.getElementById('co-airtel').value.trim();
+
+    if (!name || !phone || !address) {
+      showToast('Please fill in all required fields.', 'error');
+      return;
+    }
+
+    const rwPhone = /^07[2389]\d{7}$/;
+    if (!rwPhone.test(phone)) {
+      showToast('Enter a valid Rwandan phone number (e.g. 078XXXXXXX)', 'error');
+      return;
+    }
+
+    if (method === 'momo' && !momoNum) {
+      showToast('Please enter your MTN MoMo number.', 'error');
+      return;
+    }
+
+    if (method === 'airtel' && !airtelNum) {
+      showToast('Please enter your Airtel Money number.', 'error');
+      return;
+    }
+
+    const btn = document.getElementById('place-order-btn');
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    const total = getTotal();
+    const paymentPhone = method === 'momo' ? momoNum : method === 'airtel' ? airtelNum : phone;
+
+    try {
+      // Step 1: Create order via backend
+      const orderRes = await fetch(`${API_BASE_URL}/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer: { name, phone, address },
+          items: cart,
+          paymentMethod: method,
+          paymentPhone
+        })
+      });
+
+      const orderData = await orderRes.json();
+      if (!orderData.success) throw new Error(orderData.error || 'Failed to create order');
+
+      const { orderId, orderNumber } = orderData.order;
+
+      if (method === 'momo' || method === 'airtel') {
+        // Step 2: Request MoMo payment
+        const payRes = await fetch(`${API_BASE_URL}/payments/request-payment`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId, amount: total, phoneNumber: paymentPhone, paymentMethod: method })
+        });
+
+        const payData = await payRes.json();
+
+        // Handle demo mode or real payment
+        if (payData.success || (payData.message && payData.message.includes('access token'))) {
+          closeCheckout();
+          showPaymentPending(orderNumber, total, paymentPhone, payData.transactionId, name, phone, address);
+        } else {
+          throw new Error(payData.message || 'Payment request failed');
+        }
+
+      } else {
+        // Cash or card
+        closeCheckout();
+        showPaymentSuccess(orderNumber, total, name, phone, address);
+      }
+
+    } catch (err) {
+      // Backend not running — demo mode
+      if (err.message.toLowerCase().includes('fetch') || err.message.toLowerCase().includes('network')) {
+        closeCheckout();
+        showPaymentSuccess(`DEMO-${Math.floor(Math.random()*100000)}`, total, name, phone, address, true);
+      } else {
+        showToast('Error: ' + err.message, 'error');
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }
+    }
+  }
+
+  function showPaymentPending(orderNumber, total, phone, transactionId, name, contactPhone, address) {
+    const modal = document.getElementById('payment-status-modal');
+    const content = document.getElementById('payment-status-content');
+
+    content.innerHTML = `
+      <div class="status-spinner"></div>
+      <div class="status-title">Waiting for Payment</div>
+      <div class="status-sub">
+        We sent a payment prompt to <strong>${phone}</strong>.<br>
+        Please enter your MoMo PIN to confirm.
+      </div>
+      <div style="margin-top:2rem; padding:1.5rem; background:var(--cream); border-radius:16px; text-align:left;">
+        <div style="font-size:0.78rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-muted); margin-bottom:0.5rem;">Order Reference</div>
+        <div style="font-family:'Playfair Display',serif; font-size:1.4rem; color:var(--espresso); margin-bottom:0.25rem;">#${orderNumber}</div>
+        <div style="color:var(--gold-dark); font-weight:600; font-size:1.1rem;">${fmt(total)}</div>
+      </div>
+    `;
+
+    modal.classList.add('open');
+
+    // Poll payment status
+    if (transactionId) {
+      const poll = setInterval(async () => {
+        try {
+          const r = await fetch(`${API_BASE_URL}/payments/status/${transactionId}`);
+          const d = await r.json();
+          if (d.status === 'successful') {
+            clearInterval(poll);
+            showPaymentSuccess(orderNumber, total, name, contactPhone, address);
+          } else if (d.status === 'failed') {
+            clearInterval(poll);
+            showPaymentFailed(orderNumber);
+          }
+        } catch {}
+      }, 3000);
+
+      // Timeout after 2 minutes
+      setTimeout(() => {
+        clearInterval(poll);
+        if (modal.classList.contains('open')) {
+          content.innerHTML = `
+            <div class="status-icon">⏱️</div>
+            <div class="status-title">Payment Timeout</div>
+            <div class="status-sub">Please contact us at +250 78 000 0000 to verify your order #${orderNumber}.</div>
+            <button class="btn-primary" style="margin-top:2rem;" onclick="document.getElementById('payment-status-modal').classList.remove('open')">Close</button>
+          `;
+        }
+      }, 120000);
+    }
+  }
+
+  function showPaymentSuccess(orderNumber, total, name, phone, address, demo = false) {
+    const modal = document.getElementById('payment-status-modal');
+    modal.classList.remove('open');
+
+    // Clear cart
+    cart = [];
+    updateCartUI();
+
+    // Reset form
+    document.querySelectorAll('#checkout-modal input').forEach(i => i.value = '');
+
+    // Small delay then show success
+    setTimeout(() => {
+      const content = document.getElementById('payment-status-content');
+      content.innerHTML = `
+        <div class="status-icon">🎉</div>
+        <div class="status-title">${demo ? 'Demo Order Placed!' : 'Order Confirmed!'}</div>
+        <div class="status-sub">
+          Thank you, <strong>${name}</strong>!<br>
+          We'll call you at <strong>${phone}</strong> to confirm delivery.
+        </div>
+        <div style="margin-top:2rem; padding:1.5rem; background:var(--cream); border-radius:16px; text-align:left;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+            <span style="font-size:0.82rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.1em;">Order Number</span>
+            <span style="font-family:'Playfair Display',serif; font-weight:700; color:var(--espresso);">#${orderNumber}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+            <span style="font-size:0.82rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.1em;">Amount</span>
+            <span style="color:var(--gold-dark); font-weight:600;">${fmt(total)}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span style="font-size:0.82rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.1em;">Delivery</span>
+            <span style="font-size:0.9rem; color:var(--text-muted);">${address}</span>
+          </div>
+          ${demo ? '<div style="margin-top:1rem; padding:0.75rem; background:#FFF8DC; border-radius:10px; font-size:0.8rem; color:#8B6914;">⚠️ Demo mode — configure MTN MoMo credentials in .env for live payments.</div>' : ''}
+        </div>
+        <button class="btn-primary" style="margin-top:2rem;" onclick="document.getElementById('payment-status-modal').classList.remove('open')">Continue Shopping</button>
+      `;
+      modal.classList.add('open');
+    }, 100);
+  }
+
+  function showPaymentFailed(orderNumber) {
+    const modal = document.getElementById('payment-status-modal');
+    const content = document.getElementById('payment-status-content');
+    content.innerHTML = `
+      <div class="status-icon">❌</div>
+      <div class="status-title">Payment Failed</div>
+      <div class="status-sub">Your order #${orderNumber} could not be processed. Please try again or use a different payment method.</div>
+      <button class="btn-primary" style="margin-top:2rem;" onclick="document.getElementById('payment-status-modal').classList.remove('open'); document.getElementById('checkout-modal').classList.add('open')">Try Again</button>
+    `;
+  }
+
+  /* ─── SCROLL EFFECTS ─── */
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Fade up on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  /* ─── HERO IMAGE REVEAL ─── */
+  const heroBg = document.getElementById('hero-bg');
+  heroBg.style.backgroundImage = "url('https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1600&h=900&fit=crop&q=90')";
+  setTimeout(() => heroBg.classList.add('loaded'), 100);
+
+  /* ─── MOBILE NAV ─── */
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobile-nav');
+  hamburger.addEventListener('click', () => mobileNav.classList.toggle('open'));
+  document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => mobileNav.classList.remove('open')));
+
+  /* ─── CART EVENTS ─── */
+  document.getElementById('cart-btn').addEventListener('click', openCart);
+  document.getElementById('cart-close').addEventListener('click', closeCart);
+  document.getElementById('cart-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeCart(); });
+  document.getElementById('checkout-btn').addEventListener('click', openCheckout);
+  document.getElementById('modal-close').addEventListener('click', closeCheckout);
+  document.getElementById('place-order-btn').addEventListener('click', placeOrder);
+
+  /* ─── INIT ─── */
+  renderTabs();
+  renderProducts();
+</script>
+</body>
+</html>
